@@ -41,7 +41,7 @@ public abstract class ClassEnhancePluginDefine extends AbstractEnhanceClassDefin
             existedMethodsInterceptPoints = true;
         }
         /**
-         * nothing need to be enhanced in class instance, maybe need enhance static methods.
+         * 在类实例中不需要任何增强，可能需要增强静态方法。
          */
         if (!existedConstructorInterceptPoint && !existedMethodsInterceptPoints) {
             return newClassBuilder;
@@ -49,6 +49,7 @@ public abstract class ClassEnhancePluginDefine extends AbstractEnhanceClassDefin
 
         /**
          * 1. enhance constructors
+         * 增强构造器
          */
         if (existedConstructorInterceptPoint) {
             for (ConstructorInterceptPoint constructorInterceptPoint : constructorInterceptPoints) {
@@ -61,6 +62,7 @@ public abstract class ClassEnhancePluginDefine extends AbstractEnhanceClassDefin
         }
         /**
          * 3. enhance instance methods
+         * 增强实例方法
          */
         if (existedMethodsInterceptPoints) {
             for (InstanceMethodsInterceptPoint instanceMethodsInterceptPoint : instanceMethodsInterceptPoints) {

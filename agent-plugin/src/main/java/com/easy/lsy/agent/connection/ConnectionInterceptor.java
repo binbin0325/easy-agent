@@ -12,7 +12,7 @@ public class ConnectionInterceptor implements InstanceMethodsAroundInterceptor {
     public void beforeMethod(Object objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
         MethodInterceptResult result) throws Throwable {
 
-        System.out.println("监控 - Begin By Byte-buddy beforeMethod");
+        System.out.println("监控 - Begin instance beforeMethod");
 
         System.out.println("对象类型名称： " + objInst.getClass().getName());
         System.out.println("方法名称： " + method.getName());
@@ -21,7 +21,7 @@ public class ConnectionInterceptor implements InstanceMethodsAroundInterceptor {
             System.out.println("入参 Idx： " + (i + 1) + " 类型： " + method.getParameterTypes()[i].getTypeName() + " 内容： " + allArguments[i]);
         }
         System.out.println("出参类型： " + method.getReturnType().getName());
-        System.out.println("监控 - End beforeMethod\r\n");
+        System.out.println("监控 - End instance beforeMethod\r\n");
 
     }
 
@@ -29,7 +29,7 @@ public class ConnectionInterceptor implements InstanceMethodsAroundInterceptor {
     public Object afterMethod(Object objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
         Object ret) throws Throwable {
 
-        System.out.println("监控 - Begin By Byte-buddy afterMethod");
+        System.out.println("监控 - Begin instance afterMethod");
         System.out.println("对象类型名称： " + objInst.getClass().getName());
         System.out.println("方法名称： " + method.getName());
         System.out.println("入参个数： " + method.getParameterCount());
@@ -39,16 +39,16 @@ public class ConnectionInterceptor implements InstanceMethodsAroundInterceptor {
         System.out.println("出参类型： " + method.getReturnType().getName());
         System.out.println("出参结果： " + ret);
         //System.out.println("方法耗时：" + (System.currentTimeMillis() - start) + "ms");
-        System.out.println("监控 - End afterMethod \r\n");
+        System.out.println("监控 - End instance afterMethod \r\n");
         return ret;
     }
 
     @Override
     public void handleMethodException(Object objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
         Throwable t) {
-        System.out.println("监控 - Begin By Byte-buddy handleMethodException");
+        System.out.println("监控 - Begin instance handleMethodException");
         System.out.println("对象类型名称： " + objInst.getClass().getName());
         System.out.println("Throwable类型： " + t);
-        System.out.println("监控 - End handleMethodException\r\n");
+        System.out.println("监控 - End instance handleMethodException\r\n");
     }
 }

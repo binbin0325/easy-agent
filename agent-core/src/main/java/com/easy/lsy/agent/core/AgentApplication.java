@@ -1,5 +1,6 @@
 package com.easy.lsy.agent.core;
 
+import com.easy.lsy.agent.core.config.TypeMatcher;
 import com.easy.lsy.agent.core.plugin.AgentTransformer;
 import com.easy.lsy.agent.core.plugin.EnhanceClassBootstrap;
 import com.easy.lsy.agent.core.plugin.EnhanceClassFinder;
@@ -17,21 +18,18 @@ import static net.bytebuddy.matcher.ElementMatchers.nameStartsWith;
 public class AgentApplication {
     public static void premain(String agentArgs, Instrumentation instrumentation) {
 
+        System.out.println("agent premain start");
         final EnhanceClassFinder enhanceClassFinder = new EnhanceClassFinder(new EnhanceClassBootstrap().loadClass());
         final ByteBuddy byteBuddy = new ByteBuddy()
             .with(TypeValidation.of(false));
 
+        System.out.println("agent premain 2");
         new AgentBuilder.Default(byteBuddy)
-            .ignore(
-                nameStartsWith("net.bytebuddy.")
-                    .or(nameStartsWith("org.slf4j."))
-                    .or(nameStartsWith("org.apache.logging."))
-                    .or(nameStartsWith("org.groovy."))
-                    .or(nameContains("javassist"))
-                    .or(nameContains(".asm."))
-                    .or(nameStartsWith("sun.reflect"))
-                    .or(ElementMatchers.<TypeDescription>isSynthetic()))
+                //需要忽略的资源
+                .ignore(TypeMatcher.INSTANCE.ignoreRule())
+
             .type(enhanceClassFinder.buildMatch())
+            //.type((ElementMatchers.any()))
             .transform(new AgentTransformer(enhanceClassFinder))
             .installOn(instrumentation);
 

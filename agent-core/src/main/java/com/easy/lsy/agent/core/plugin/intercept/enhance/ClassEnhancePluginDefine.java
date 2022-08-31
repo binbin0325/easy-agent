@@ -3,10 +3,12 @@ package com.easy.lsy.agent.core.plugin.intercept.enhance;
 import com.easy.lsy.agent.core.logging.api.ILog;
 import com.easy.lsy.agent.core.logging.api.LogManager;
 import com.easy.lsy.agent.core.plugin.AbstractEnhanceClassDefine;
+import com.easy.lsy.agent.core.plugin.StaticMethodsInter;
 import com.easy.lsy.agent.core.plugin.intercept.ConstructorInterceptPoint;
 import com.easy.lsy.agent.core.plugin.intercept.EnhanceException;
 import com.easy.lsy.agent.core.plugin.intercept.InstanceMethodsInterceptPoint;
 import com.easy.lsy.agent.core.utils.StringUtils;
+import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
@@ -24,7 +26,31 @@ public abstract class ClassEnhancePluginDefine extends AbstractEnhanceClassDefin
     @Override
     protected DynamicType.Builder<?> enhance(TypeDescription typeDescription, DynamicType.Builder<?> newClassBuilder,
         ClassLoader classLoader) {
-        return enhanceInstance(typeDescription, newClassBuilder, classLoader);
+
+        // 静态方法插桩
+        newClassBuilder = this.enhanceJavaClass(typeDescription, newClassBuilder, classLoader);
+
+        // 构造器和实例方法插桩
+        newClassBuilder = this.enhanceInstance(typeDescription, newClassBuilder, classLoader);
+
+        return newClassBuilder;
+    }
+
+    /**
+     * 调用enhanceClass()方法做静态方法插桩
+     * ClassEnhancePluginDefine 中实现了AbstractClassEnhancePluginDefine的抽象方法enhanceClass()：
+     *
+     * Enhance a class to intercept class static methods.
+     *
+     * @param typeDescription target class description
+     * @param newClassBuilder byte-buddy's builder to manipulate class bytecode.
+     * @return new byte-buddy's builder for further manipulation.
+     */
+    private DynamicType.Builder<?> enhanceJavaClass(TypeDescription typeDescription, DynamicType.Builder<?> newClassBuilder,
+                                                           ClassLoader classLoader) {
+            newClassBuilder = newClassBuilder.method(isStatic().and(ElementMatchers.any()))
+                    .intercept(Advice.to(StaticMethodsInter.class));
+        return newClassBuilder;
     }
 
     private DynamicType.Builder<?> enhanceInstance(TypeDescription typeDescription,

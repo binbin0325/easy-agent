@@ -207,6 +207,7 @@ public enum TypeMatcher {
             .or(nameStartsWith("org.opentest4j."))
 
             .or(nameStartsWith("org.junit."))
+            .or(nameStartsWith("org.opentest4j."))
 
             .or(nameStartsWith("org.apache.maven.plugin.surefire.log."))
             //.or(ElementMatchers.<TypeDescription>isSynthetic()))
